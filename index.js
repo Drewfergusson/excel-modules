@@ -87,9 +87,11 @@ function getColumnFromIndex(index) {
     },
     addRowsDown: (number) => {
       endingRow = endingRow + number;
+      return this;
     },
     addColumnsRight: (number) => {
       endingColumn = columnAddition(endingColumn, number);
+      return this;
     }
   };
 }
