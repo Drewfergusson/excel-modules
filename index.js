@@ -80,7 +80,8 @@ function getColumnFromIndex(index) {
     endingRow,
     startingColumn,
     endingColumn,
-    sheet
+    sheet,
+    location: `${sheet}!${startOfRange}:${endOfRange}`
   };
 }
 
