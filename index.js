@@ -63,24 +63,28 @@ function getColumnFromIndex(index) {
  * const fullRange = range('')
  */
  function rangeFactory(rangeString) {
-  let sheet = rangeString.match(/(.+)!/)?  rangeString.match(/(.+)!/)[1] : '';
+  let sheet = rangeString.match(/(.+)!/)?  rangeString.match(/(.+)!/)[1] : undefined;
 
-  let startingRow = Number(rangeString.match(/[A-Z]+([0-9])+:/)[1]);
-  let startingColumn = rangeString.match(/([A-Z]+)[0-9]+:/)[1];
+  let startingRow = rangeString.match(/[A-Z]+([0-9])+:/)? Number(rangeString.match(/[A-Z]+([0-9])+:/)[1]): undefined;
+  let startingColumn =  rangeString.match(/([A-Z]+)[0-9]+:/)? rangeString.match(/([A-Z]+)[0-9]+:/)[1] : undefined;
 
-  let endingRow = Number(endOfRange.match(/:[A-Z]([0-9])+/)[1]);
-  let endingColumn = endOfRange.match(/:([A-Z])+/)[1];
+  let endingRow = endOfRange.match(/:[A-Z]([0-9])+/)? Number(endOfRange.match(/:[A-Z]([0-9])+/)[1]): undefined;
+  let endingColumn = endOfRange.match(/:([A-Z])+/)? endOfRange.match(/:([A-Z])+/)[1]: undefined;
 
   return {
-    toString: `${startingColumn}${startingRow}:${endingColumn}:${endingRow}`,
-    startOfRange,
-    endOfRange,
+    toString: () => {
+      return `${startingColumn}${startingRow}:${endingColumn || ''}:${endingRow || ''}`
+    },
+    startOfRange: `${startingColumn}${startingRow}`,
+    endOfRange: `${endingColumn}:${endingRow}`,
     startingRow,
     endingRow,
     startingColumn,
     endingColumn,
     sheet,
-    location: `${sheet}!${startingColumn}${startingRow}:${endingColumn}:${endingRow}`,
+    getLocation: () => {
+      return `${sheet || ''}!${startingColumn}${startingRow}:${endingColumn || ''}:${endingRow || ''}`
+    },
     addRowsDown: (number) => {
       endingRow = endingRow + number;
     },
