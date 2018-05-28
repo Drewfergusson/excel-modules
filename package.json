@@ -1,0 +1,11 @@
+{
+  "name": "excel-modules",
+  "version": "1.0.0",
+  "description": "Tools to simplify the javascript excel api",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Andrew Ferguson",
+  "license": "ISC"
+}
