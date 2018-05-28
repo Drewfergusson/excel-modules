@@ -5,7 +5,8 @@ const lettersArr = [undefined, ...'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('')];
 const lettersInAlphabet = 26;
 
 module.exports = {
-  range: rangeFactory
+  range: rangeFactory,
+  cell: cellFactory
 }
 
 /**
@@ -62,18 +63,16 @@ function getColumnFromIndex(index) {
  * const fullRange = range('')
  */
  function rangeFactory(rangeString) {
-  const sheet = rangeString.match(/(.+)!/)?  rangeString.match(/(.+)!/)[1] : '';
+  let sheet = rangeString.match(/(.+)!/)?  rangeString.match(/(.+)!/)[1] : '';
 
-  const startOfRange = rangeString.match(/([A-Z]{1,3}[0-9]{1,}):/)[1];
-  const startingRow = Number(startOfRange.match(/[0-9]+/)[0]);
-  const startingColumn = startOfRange.match(/[A-Z]+/)[0];
+  let startingRow = Number(rangeString.match(/[A-Z]+([0-9])+:/)[1]);
+  let startingColumn = rangeString.match(/([A-Z]+)[0-9]+:/)[1];
 
-  const endOfRange = rangeString.match(/:([A-Z][1-9]{1,3}[0-9]*)/)[1];
-  const endingRow = Number(endOfRange.match(/[0-9]+/)[0]);
-  const endingColumn = endOfRange.match(/[A-Z]+/)[0];
+  let endingRow = Number(endOfRange.match(/:[A-Z]([0-9])+/)[1]);
+  let endingColumn = endOfRange.match(/:([A-Z])+/)[1];
 
   return {
-    toString: startOfRange + ':' + endOfRange,
+    toString: `${startingColumn}${startingRow}:${endingColumn}:${endingRow}`,
     startOfRange,
     endOfRange,
     startingRow,
@@ -81,10 +80,36 @@ function getColumnFromIndex(index) {
     startingColumn,
     endingColumn,
     sheet,
-    location: `${sheet}!${startOfRange}:${endOfRange}`
+    location: `${sheet}!${startingColumn}${startingRow}:${endingColumn}:${endingRow}`,
+    addRowsDown: (number) => {
+      endingRow = endingRow + number;
+    },
+    addColumnsRight: (number) => {
+      endingColumn = columnAddition(endingColumn, number);
+    }
   };
 }
 
-function cellObj() {
-  return {};
+/**
+ *
+ */
+function cellFactory(cellString) {
+  let sheet = rangeString.match(/(.+)!/)?  rangeString.match(/(.+)!/)[1] : '';
+
+  let row = Number(cellString.match(/[0-9]+/)[0]);
+  let column = startOfRange.match(/[A-Z]+/)[0];
+
+  return {
+    row,
+    column,
+    toString: `${column}${row}`,
+    sheet,
+    location: `${sheet}!${column}${row}`,
+    addRowsDown: (number) => {
+      return rangeFactory(`${sheet}!${column}${row}:${column}${row + number}`);
+    },
+    addColumnsRight: (number) => {
+      return rangeFactory(`${sheet}!${column}${row}:${columnAddition(column, number)}${row}`);
+    }
+  };
 }
