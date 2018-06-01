@@ -42,9 +42,29 @@ function getColumnFromIndex(index) {
   return (lettersArr[Math.floor(index / lettersInAlphabet)] || '') + lettersArr[(index % lettersInAlphabet)];
 }
 
+function sheet(rangeString) {
+  const sheet = rangeString.match(/(.+)!/)?  rangeString.match(/(.+)!/)[1]: undefined;
+  if(!sheet) {
+    throw new Error('Invalid: unable to parse sheet');
+  }
+  return sheet;
+}
+
+function range() {
+  const startingRow = rangeString.match(/!*[A-Z]+([0-9]+):*/)? Number(rangeString.match(/!*[A-Z]+([0-9]+):*/)[1]): undefined;
+  const startingColumn =  rangeString.match(/!*([A-Z]+)[0-9]+:*/)? rangeString.match(/!*([A-Z]+)[0-9]+:*/)[1]: undefined;
+  if(!startingRow || !startingColumn) {
+    throw new Error('Invalid: Unable to parse start of range');
+  }
+  const endingRow = rangeString.match(/:[A-Z]([0-9]+)/)? Number(rangeString.match(/:[A-Z]+([0-9]+)/)[1]): startingRow;
+  const endingColumn = rangeString.match(/:([A-Z]+)/)? rangeString.match(/:([A-Z]+)/)[1]: startingColumn;
+  return { startingColumn, staringRow, endingRow, endingColumn };
+}
+
 module.exports = {
   columnAddition,
   rowEndingColumn,
   getIndexFromColumn,
-  getColumnFromIndex 
+  getColumnFromIndex,
+  parse: () => ({sheet, range})
 }
