@@ -19,16 +19,21 @@ module.exports = {
  */
 function parseRange(rangeString) {
   let sheet = rangeString.match(/(.+)!/)?  rangeString.match(/(.+)!/)[1] : undefined;
-
-  let startingRow = rangeString.match(/!*[A-Z]+([0-9])+:*/)? Number(rangeString.match(/!*[A-Z]+([0-9])+:*/)[1]): undefined;
-  let startingColumn =  rangeString.match(/!*([A-Z]+)[0-9]+:*/)? rangeString.match(/!*([A-Z]+)[0-9]+:*/)[1] : undefined;
-
-  if(!startingRow && !startingColumn) {
-    throw new Error('Invalid range string');
+  if(!sheet) {
+    throw new Error('Invalid: unable to parse sheet');
   }
 
-  let endingRow = rangeString.match(/:[A-Z]([0-9])+/)? Number(rangeString.match(/:[A-Z]+([0-9])+/)[1]): undefined;
-  let endingColumn = rangeString.match(/:([A-Z])+/)? rangeString.match(/:([A-Z])+/)[1]: undefined;
+  let startingRow = rangeString.match(/!*[A-Z]+([0-9]+):*/)? Number(rangeString.match(/!*[A-Z]+([0-9]+):*/)[1]): undefined;
+  let startingColumn =  rangeString.match(/!*([A-Z]+)[0-9]+:*/)? rangeString.match(/!*([A-Z]+)[0-9]+:*/)[1] : undefined;
+  if(!startingRow || !startingColumn) {
+    throw new Error('Invalid: Unable to parse start of range');
+  }
+
+  let endingRow = rangeString.match(/:[A-Z]([0-9]+)/)? Number(rangeString.match(/:[A-Z]+([0-9]+)/)[1]): undefined;
+  let endingColumn = rangeString.match(/:([A-Z]+)/)? rangeString.match(/:([A-Z]+)/)[1]: undefined;
+  if(!endingRow || !endingColumn) {
+    throw new Error('Invalid, unable to parse end of range');
+  }
 
   return { sheet, startingRow, startingColumn, endingRow, endingColumn };
 }
@@ -47,7 +52,7 @@ function rangeFromCell(rangeString, height, width) {
  * const selectedRange = range('A1:I1')
  * const fullRange = range('')
  */
- function range(rangeString) {
+function range(rangeString) {
   let { sheet, startingRow, startingColumn, endingRow, endingColumn } = parseRange(rangeString);
 
   return {
@@ -81,7 +86,10 @@ function rangeFromCell(rangeString, height, width) {
   }
 
   function getLocation() {
-    return `${this.sheet || ''}!${this.startingColumn}${this.startingRow}:${this.endingColumn || ''}:${this.endingRow || ''}`
+    if(!this.endingColumn || !this.endingColumn) {
+      return `${this.sheet + '!' || ''}${this.startingColumn}${this.startingRow}`;
+    }
+    return `${this.sheet + '!' || ''}${this.startingColumn}${this.startingRow}:${this.endingColumn}${this.endingRow}`;
   }
 
   function addRowsToStartCell(number) {
@@ -98,8 +106,8 @@ function rangeFromCell(rangeString, height, width) {
    */
   function rows() {
     const rows = [];
-    for(let row = startingRow; row > endingRow; row++) {
-      rows.push[range(`${this.sheet}!${this.startingColumn}${row}:${this.endingColumn}${row}`)]
+    for(let row = startingRow; row <= endingRow; row++) {
+      rows.push(range(`${this.sheet}!${this.startingColumn}${row}:${this.endingColumn}${row}`));
     }
     return rows;
   }
