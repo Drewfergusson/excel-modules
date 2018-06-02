@@ -81,7 +81,7 @@ function rangeFromCell(rangeString, height, width) {
   }
 
   function getLocation() {
-    return `${this.sheet || ''}!${this.startingColumn}${this.startingRow}:${this.endingColumn || ''}:${this.endingRow || ''}`
+    return `${this.sheet || ''}!${this.startingColumn}${this.startingRow}:${this.endingColumn || ''}${this.endingRow || ''}`
   }
 
   function addRowsToStartCell(number) {
