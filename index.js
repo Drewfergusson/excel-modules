@@ -98,8 +98,8 @@ function rangeFromCell(rangeString, height, width) {
    */
   function rows() {
     const rows = [];
-    for(let row = startingRow; row > endingRow; row++) {
-      rows.push[range(`${this.sheet}!${this.startingColumn}${row}:${this.endingColumn}${row}`)]
+    for(let row = startingRow; row <= endingRow; row++) {
+      rows.push(range(`${this.sheet}!${this.startingColumn}${row}:${this.endingColumn}${row}`))
     }
     return rows;
   }
