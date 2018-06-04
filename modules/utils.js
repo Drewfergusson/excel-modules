@@ -1,4 +1,4 @@
-
+'use strict';
 // setting undefined because the JS compliler evaluates (null || '') as null
 // also using .split('') because ...String also needs a polyfill on IE which (I think) is the version
 // of iframe browser used on Windows Excel
@@ -43,22 +43,17 @@ function getColumnFromIndex(index) {
 }
 
 function sheet(rangeString) {
-  const sheet = rangeString.match(/(.+)!/)?  rangeString.match(/(.+)!/)[1]: undefined;
-  if(!sheet) {
-    throw new Error('Invalid: unable to parse sheet');
-  }
+  const sheet = rangeString.match(/(.+)!/)? rangeString.match(/(.+)!/)[1]: 'Sheet1';
   return sheet;
 }
 
-function range() {
-  const startingRow = rangeString.match(/!*[A-Z]+([0-9]+):*/)? Number(rangeString.match(/!*[A-Z]+([0-9]+):*/)[1]): undefined;
-  const startingColumn =  rangeString.match(/!*([A-Z]+)[0-9]+:*/)? rangeString.match(/!*([A-Z]+)[0-9]+:*/)[1]: undefined;
-  if(!startingRow || !startingColumn) {
-    throw new Error('Invalid: Unable to parse start of range');
-  }
+function range(rangeString) {
+  const startingRow = rangeString.match(/!*[A-Z]+([0-9]+):*/)? Number(rangeString.match(/!*[A-Z]+([0-9]+):*/)[1]): 1;
+  const startingColumn =  rangeString.match(/!*([A-Z]+)[0-9]+:*/)? rangeString.match(/!*([A-Z]+)[0-9]+:*/)[1]: 'A';
+
   const endingRow = rangeString.match(/:[A-Z]([0-9]+)/)? Number(rangeString.match(/:[A-Z]+([0-9]+)/)[1]): startingRow;
   const endingColumn = rangeString.match(/:([A-Z]+)/)? rangeString.match(/:([A-Z]+)/)[1]: startingColumn;
-  return { startingColumn, staringRow, endingRow, endingColumn };
+  return { startingColumn, startingRow, endingRow, endingColumn };
 }
 
 module.exports = {
@@ -66,5 +61,5 @@ module.exports = {
   rowEndingColumn,
   getIndexFromColumn,
   getColumnFromIndex,
-  parse: () => ({sheet, range})
+  parse: { sheet, range }
 }

@@ -1,17 +1,8 @@
+'use strict';
 const range = require('./modules/range');
 
 module.exports = {
-  range: rangeBuilder,
-  rangeFrom: () => ({
-    async: () => ({selected, startOfSelected})
-  })
+  range
 }
 
-function selected() {
-
-}
-
-function startOfSelected() {
-
-}
 
