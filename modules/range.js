@@ -56,7 +56,7 @@ const range = rangeString => {
   }
 
   const setHeight = height => {
-    endingRow = utils.nthColumnFrom(endingRow, height);
+    endingRow = utils.nthRowFrom(endingRow, height);
     return;
   }
 
@@ -64,14 +64,14 @@ const range = rangeString => {
    * @return {Number}
    */
   const height = () => {
-    return endingRow - startingRow;
+    return endingRow - (startingRow - 1);
   }
 
   /**
    * @return {Number}
    */
   const width = () => {
-    return utils.getIndexFromColumn(endingColumn) - utils.getIndexFromColumn(startingColumn);
+    return utils.getIndexFromColumn(endingColumn) - (utils.getIndexFromColumn(startingColumn) - 1);
   }
 
   /**
