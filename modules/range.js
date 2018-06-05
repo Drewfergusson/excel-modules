@@ -18,7 +18,7 @@ const utils = require('./utils');
 const range = rangeString => {
   let sheet = utils.parse.sheet(rangeString);
   let { startingRow, startingColumn, endingRow, endingColumn } = utils.parse.range(rangeString);
-  let values = [];
+  let rangeValues = [];
 
   /**
    * @return {String}
@@ -55,7 +55,7 @@ const range = rangeString => {
    */
   const addRowsDown = number => {
     endingRow = (endingRow) + number;
-    return this;
+    return;
   }
 
   /**
@@ -63,7 +63,7 @@ const range = rangeString => {
    */
   const addColumnsRight = number => {
     endingColumn = utils.columnAddition(endingColumn, number);
-    return this;
+    return;
   }
 
   /**
@@ -84,7 +84,7 @@ const range = rangeString => {
    * @return {Range}
    */
   const startCell = () => {
-    return range(`${sheet}${start().toString()}`);
+    return range(`${sheet}!${startingColumn}${startingRow}`);
   }
   /**
    * @return {Boolean}
@@ -105,40 +105,44 @@ const range = rangeString => {
   }
 
   const addValues = values => {
-    if(values.length !== height) {
+    if(values.length !== height()) {
       throw new Error(`${values.length} rows passed in won't fit cleanly into this range of ${height()} rows`);
     }
     values.forEach((row, index) => {
-      if(row.length !== width) {
+      if(row.length !== width()) {
         throw new Error(`Row ${index} with a width of ${row.length} will not fit cleanly into this range of width ${width()}`)
       }
     })
-    return values = values;
+    return rangeValues = values;
   }
 
-  getValues = () => {
-    return values;
+  const values = () => {
+    return rangeValues;
   }
 
   const from = rangeString => {
+    let newRange = range(rangeString).startCell();
     return {
-      values: () => {
-
+      values: values => {
+        values.reduce((acc, row) => {
+          if(row.length !== acc) {
+            throw new Error('Rows are not all of the same length');
+          }
+          return row.length
+        }, values[0].length);
+        newRange.addColumnsRight(values[0].length);
+        newRange.addRowsDown(values.length);
+        newRange.addValues(values);
+        return newRange;
       }
-    }
+    };
   }
 
   return {
-    toString,
-    start: () => ({ row: startingRow, column: startingColumn, toString:rangeStartString }),
+    start: () => ({ row: startingRow, column: startingColumn, toString: rangeStartString }),
     end: () => ({ row: endingRow, column: endingColumn, toString: rangeEndString }),
-    sheet,
-    getLocation,
-    rows,
-    height,
-    width,
-    values,
-    from
+    toString, sheet, getLocation, addRowsDown, addColumnsRight, rows, height, startCell,
+    addValues, width, values, from
   };
 }
 

@@ -43,14 +43,25 @@ function getColumnFromIndex(index) {
 }
 
 function sheet(rangeString) {
-  const sheet = rangeString.match(/(.+)!/)? rangeString.match(/(.+)!/)[1]: 'Sheet1';
+  if(!rangeString) {
+    return 'Sheet1'
+  }
+  const sheet = rangeString.match(/(.+)!/)? rangeString.match(/(.+)!/)[1]: undefined;
+  if(!sheet) {
+    throw new Error('Unable to parse sheet');
+  }
   return sheet;
 }
 
 function range(rangeString) {
-  const startingRow = rangeString.match(/!*[A-Z]+([0-9]+):*/)? Number(rangeString.match(/!*[A-Z]+([0-9]+):*/)[1]): 1;
-  const startingColumn =  rangeString.match(/!*([A-Z]+)[0-9]+:*/)? rangeString.match(/!*([A-Z]+)[0-9]+:*/)[1]: 'A';
-
+  if(!rangeString) {
+    return { startingColumn: 'A', startingRow: 1, endingRow: 1, endingColumn: 'A' }
+  }
+  const startingRow = rangeString.match(/!*[A-Z]+([0-9]+):*/)? Number(rangeString.match(/!*[A-Z]+([0-9]+):*/)[1]): undefined;
+  const startingColumn =  rangeString.match(/!*([A-Z]+)[0-9]+:*/)? rangeString.match(/!*([A-Z]+)[0-9]+:*/)[1]: undefined;
+  if(!startingRow || !startingColumn) {
+    throw new Error('Unable to parse start of range');
+  }
   const endingRow = rangeString.match(/:[A-Z]([0-9]+)/)? Number(rangeString.match(/:[A-Z]+([0-9]+)/)[1]): startingRow;
   const endingColumn = rangeString.match(/:([A-Z]+)/)? rangeString.match(/:([A-Z]+)/)[1]: startingColumn;
   return { startingColumn, startingRow, endingRow, endingColumn };
