@@ -23,12 +23,12 @@ const range = rangeString => {
   /**
    * @return {String}
    */
-  const rangeStartString = () => `${startingColumn}:${startingRow}`;
+  const rangeStartString = () => `${startingColumn}${startingRow}`;
 
   /**
    * @return {String}
    */
-  const rangeEndString = () => `${endingColumn}:${endingRow}`;
+  const rangeEndString = () => `${endingColumn}${endingRow}`;
 
   /**
    * @return {String}
@@ -50,19 +50,13 @@ const range = rangeString => {
     return `${sheet + '!' || ''}${startingColumn}${startingRow}:${endingColumn}${endingRow}`;
   }
 
-  /**
-   * @return {Range}
-   */
-  const addRowsDown = number => {
-    endingRow = (endingRow) + number;
+  const setWidth = width => {
+    endingColumn = utils.nthColumnFrom(endingColumn, width);
     return;
   }
 
-  /**
-   * @return {Range}
-   */
-  const addColumnsRight = number => {
-    endingColumn = utils.columnAddition(endingColumn, number);
+  const setHeight = height => {
+    endingRow = utils.nthColumnFrom(endingRow, height);
     return;
   }
 
@@ -128,10 +122,10 @@ const range = rangeString => {
           if(row.length !== acc) {
             throw new Error('Rows are not all of the same length');
           }
-          return row.length
+          return row.length;
         }, values[0].length);
-        newRange.addColumnsRight(values[0].length);
-        newRange.addRowsDown(values.length);
+        newRange.setWidth(values[0].length);
+        newRange.setHeight(values.length);
         newRange.addValues(values);
         return newRange;
       }
@@ -141,8 +135,8 @@ const range = rangeString => {
   return {
     start: () => ({ row: startingRow, column: startingColumn, toString: rangeStartString }),
     end: () => ({ row: endingRow, column: endingColumn, toString: rangeEndString }),
-    toString, sheet, getLocation, addRowsDown, addColumnsRight, rows, height, startCell,
-    addValues, width, values, from
+    toString, sheet, getLocation, rows, height, startCell, addValues, width, values, from, setWidth,
+    setHeight
   };
 }
 

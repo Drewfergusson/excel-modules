@@ -4,21 +4,29 @@
 // of iframe browser used on Windows Excel
 const lettersArr = [undefined, ...'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('')];
 const lettersInAlphabet = 26;/**
+
+/**
  *
- * ({startingColumn: String, addedColumns: Number}) => String
- * ('A', 5) => 'F'
- * ('AA' + 1) => 'AB'
+ * The non-zeroth based column from the given starting column
+ * @return {String}
  */
-function columnAddition(startingColumn, addedColumns) {
-  return getColumnFromIndex(getIndexFromColumn(startingColumn) + addedColumns);
+function nthColumnFrom(startingColumn, n) {
+  return getColumnFromIndex(getIndexFromColumn(startingColumn) + (n - 1));
+}
+
+/**
+ * The non-zeroth based row form the given starting row
+ * @return
+ */
+function nthRowFrom(startingRow, n) {
+  return startingRow + (n - 1);
 }
 
 /**
  * Using the starging column, get the ending column for a row of a given length
  */
 function rowEndingColumn(startingColumn, rowLength) {
-  // addedColumns -1 to get row that includes the starting column in the total length
-  return getColumnFromIndex(getIndexFromColumn(startingColumn) + rowLength - 1);
+  return getColumnFromIndex(getIndexFromColumn(startingColumn) + rowLength);
 }
 
 /**
@@ -68,9 +76,10 @@ function range(rangeString) {
 }
 
 module.exports = {
-  columnAddition,
   rowEndingColumn,
   getIndexFromColumn,
   getColumnFromIndex,
+  nthColumnFrom,
+  nthRowFrom,
   parse: { sheet, range }
 }
