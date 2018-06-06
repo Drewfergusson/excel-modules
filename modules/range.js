@@ -43,7 +43,7 @@ const range = rangeString => {
   /**
    * @return {String}
    */
-  const getLocation = () => {
+  const location = () => {
     if(!endingColumn || !endingColumn) {
       return `${sheet + '!' || ''}${startingColumn}${startingRow}`;
     }
@@ -135,7 +135,7 @@ const range = rangeString => {
   return {
     start: () => ({ row: startingRow, column: startingColumn, toString: rangeStartString }),
     end: () => ({ row: endingRow, column: endingColumn, toString: rangeEndString }),
-    toString, sheet, getLocation, rows, height, startCell, addValues, width, values, from, setWidth,
+    toString, sheet, location, rows, height, startCell, addValues, width, values, from, setWidth,
     setHeight
   };
 }
