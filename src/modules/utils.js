@@ -70,8 +70,8 @@ function range(rangeString) {
   if(!startingRow || !startingColumn) {
     throw new Error('Unable to parse start of range');
   }
-  const endingRow = rangeString.match(/:[A-Z]([0-9]+)/)? Number(rangeString.match(/:[A-Z]+([0-9]+)/)[1]): startingRow;
-  const endingColumn = rangeString.match(/:([A-Z]+)/)? rangeString.match(/:([A-Z]+)/)[1]: startingColumn;
+  const endingRow = rangeString.match(/:[A-Z]+([0-9]+)/)? Number(rangeString.match(/:[A-Z]+([0-9]+)/)[1]): startingRow;
+  const endingColumn = rangeString.match(/:([A-Z]+)[0-9]+/)? rangeString.match(/:([A-Z]+)/)[1]: startingColumn;
   return { startingColumn, startingRow, endingRow, endingColumn };
 }
 
