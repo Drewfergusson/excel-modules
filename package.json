@@ -1,10 +1,11 @@
 {
   "name": "excel-modules",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "Tools to simplify the javascript excel api",
   "main": "build/index.js",
   "scripts": {
-    "test": "tape **/*.tests.js"
+    "test": "tape **/*.tests.js",
+    "build": "babel src/**/*.js -d build"
   },
   "author": "Andrew Ferguson",
   "license": "ISC",

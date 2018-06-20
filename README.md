@@ -6,8 +6,8 @@ excel javascript api.
 
 ```js
   const selectedRange = range('A1:H5');
-  selectedRange.startingRow //=> 1
-  selectedRange.endingColumn //=> 'H'
+  selectedRange.start().row //=> 1
+  selectedRange.end().row //=> 'H'
 
   const otherRange = range('Sheet1!A1:H5');
   otherRange.sheet //=> 'Sheet1'
