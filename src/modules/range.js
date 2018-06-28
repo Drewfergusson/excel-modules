@@ -128,6 +128,11 @@ const range = rangeString => {
         newRange.setHeight(values.length);
         newRange.addValues(values);
         return newRange;
+      },
+      dimensions: ({rows, columns}) => {
+        newRange.setHeight(rows);
+        newRange.setWidth(columns);
+        return newRange;
       }
     };
   }

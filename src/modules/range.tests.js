@@ -8,12 +8,15 @@ test('testing sheet of created range', t => {
 });
 
 test('creating a range from values', t => {
-  t.plan(5);
+  t.plan(6);
   const values = [
     [1, 2, 4], ['A', 'B', 2]
   ];
   const cells = range().from('Sheet1!A5').values(values);
   t.equal(cells.sheet, 'Sheet1');
+
+  const span = range().from('Sheet1!A1').dimensions({rows: 3, columns: 10});
+  t.equal(span.location(), 'Sheet1!A1:J3');
 
   t.comment('Testing start and end of range values');
   t.equal(cells.start().toString(), 'A5');

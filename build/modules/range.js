@@ -139,6 +139,14 @@ var range = function range(rangeString) {
         newRange.setHeight(_values.length);
         newRange.addValues(_values);
         return newRange;
+      },
+      dimensions: function dimensions(_ref) {
+        var rows = _ref.rows,
+            columns = _ref.columns;
+
+        newRange.setHeight(rows);
+        newRange.setWidth(columns);
+        return newRange;
       }
     };
   };
