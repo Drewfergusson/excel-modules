@@ -1,6 +1,6 @@
 {
   "name": "excel-modules",
-  "version": "2.2.1",
+  "version": "2.2.2",
   "description": "Tools to simplify the javascript excel api",
   "main": "build/index.js",
   "scripts": {
