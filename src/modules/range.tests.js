@@ -26,3 +26,14 @@ test('creating a range from values', t => {
   t.equal(cells.height(), 2);
   t.equal(cells.width(), 3);
 });
+
+test('sheet name edge cases', t => {
+  t.plan(2);
+
+  const spaceInName = range("'Sheet 1'!:A5");
+  const tabInName = range("'Sheet\t1'!:A5");
+
+  t.equal(spaceInName.sheet, "Sheet 1");
+  t.equal(tabInName.sheet, "Sheet\t1")
+
+});

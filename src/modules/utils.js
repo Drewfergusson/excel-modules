@@ -55,10 +55,11 @@ function sheet(rangeString) {
     return 'Sheet1'
   }
   const sheet = rangeString.match(/(.+)!/)? rangeString.match(/(.+)!/)[1]: undefined;
+  console.log(sheet);
   if(!sheet) {
     throw new Error('Unable to parse sheet');
   }
-  return sheet;
+  return sheet.replace(/^'/, '').replace(/'$/, '');
 }
 
 function range(rangeString) {
