@@ -56,11 +56,11 @@ function sheet(rangeString) {
   if (!rangeString) {
     return 'Sheet1';
   }
-  var sheet = rangeString.match(/'{0,1}(.+)'{0,1}!/) ? rangeString.match(/'{0,1}(.+)'{0,1}!/)[1] : undefined;
+  var sheet = rangeString.match(/(.+)!/) ? rangeString.match(/(.+)!/)[1] : undefined;
   if (!sheet) {
     throw new Error('Unable to parse sheet');
   }
-  return sheet;
+  return sheet.replace(/^'/, '').replace(/'$/, '');
 }
 
 function range(rangeString) {
